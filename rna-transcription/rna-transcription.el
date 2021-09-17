@@ -17,11 +17,14 @@ ref. http://ergoemacs.org/emacs/elisp_string_functions.html"
   (cond
    ((<= (length dna-strand) 0) "")
    ((= (length dna-strand) 1) (single-symb dna-strand))
-   (t (multi-symb strand)))
+   (t (multi-symb dna-strand)))
   )
 
 (defun single-symb (dna-symb)
-  (cdr (assoc dna-symb base))
+  (progn
+    (setq res (cdr (assoc dna-symb base)))
+    (or (and (boundp 'res) res)
+        (throw 'Error "not such key")))
   )
 
 (defun multi-symb (dna-strand)

@@ -21,6 +21,9 @@
 (ert-deftest transcribes-thymine-to-adenine ()
   (should (string= "A" (to-rna "T"))))
 
+(ert-deftest it-transcribes-3-nucleotides ()
+  (should (string= "UGC" (to-rna "ACG"))))
+
 (ert-deftest it-transcribes-all-nucleotides ()
   (should (string= "UGCACCAGAAUU"
                    (to-rna "ACGTGGTCTTAA"))))
