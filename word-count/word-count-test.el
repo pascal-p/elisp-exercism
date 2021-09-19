@@ -59,5 +59,16 @@
                          ("go" . 3)))))
 
 
+(ert-deftest normalize-case-test-and-punc ()
+  (should (equal-assoc (word-count "go Go GO, oh no, Stop! stop! it : that's crazy...")
+                       '(("stop" . 2)
+                         ("go" . 3)
+                         ("oh" . 1)
+                         ("no" . 1)
+                         ("it" . 1)
+                         ("that's" . 1)
+                         ("crazy" . 1)))))
+
+
 (provide 'word-count-test)
 ;;; word-count-test.el ends here

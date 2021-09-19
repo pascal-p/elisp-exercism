@@ -19,7 +19,8 @@
          (wc (split-string input))))
 
 (defun wc (wlst)
-  "given a list of token, exclude non word ones and return an assoc list word / count for the rest"
+  "given a list of token, exclude non word ones and return an
+assoc list word / count for the rest"
   (let* ((words (sort (down-case (to-word-list wlst)) 'string<))
          (wc-assoc '()))
     (progn
@@ -30,6 +31,7 @@
   )
 
 (defun update-wc (word wc-assoc)
+  "no side-effect on wc-assoc here..."
   (let* ((cnt (or (cdr (assoc word wc-assoc)) 0))
          (ncnt (1+ cnt)))
     (cons (cons word ncnt) (assoc-delete-all word wc-assoc))
@@ -50,17 +52,15 @@ Remove empty tokens"
 
 ;; we need a filter hof (higher order function)
 (defun ya-filter (pred lst)
-  (delete ":x_d_e_l"              ;; a specila token to remove from resulting list
+  (delete ":x_d_e_l"              ;; a special token to remove from resulting list
           (mapcar (lambda (x)
                     (if (funcall pred x) x (symbol-name ':x_d_e_l))) lst))
   )
 
 ;; (ya-filter (lambda (x) (= 1 (% x 2))) '(1 2 3 4 5))   ; => (1 3 5)
 ;; (ya-filter (lambda (w) (string-match "^[[:word:]]+$" w)) '("foo" "bar" "bar!")) ; => ("foo" "bar")
-
 ;; (sort '(2 1 3) '>)             ;; => (3 2 1)
 ;; (sort '("foo" "bar") 'string<) ;; => ("bar" "foo")
-
 ;; (downcase "FOO") ;; => "foo"
 
 (provide 'word-count)
