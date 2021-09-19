@@ -42,13 +42,20 @@ assoc list word / count for the rest"
 Remove any non-word character from each token
 Remove empty tokens"
   (delete ""
-          (mapcar (lambda (w) (replace-regexp-in-string "[^[:alnum:]]+$" ""  w))
+          (mapcar (lambda (w)
+                    (replace-regexp-in-string "^[^[:alnum:]]+" ""
+                                              (replace-regexp-in-string "[^[:alnum:]]+$" ""  w)))
                   lst))
   )
 
-(defun down-case (lst)
-  (mapcar 'downcase lst)
+(defun down-case (wlist)
+  (mapcar 'downcase wlist)
   )
+
+;; (defun clean-word (wlist)
+;;   (delete ""
+;;           (mapcar (lambda (w) ()) wlist))
+;;   )
 
 ;; we need a filter hof (higher order function)
 (defun ya-filter (pred lst)

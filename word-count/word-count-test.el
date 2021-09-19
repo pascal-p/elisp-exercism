@@ -70,5 +70,19 @@
                          ("crazy" . 1)))))
 
 
+(ert-deftest normalize-case-test-and-punc ()
+  (should (equal-assoc (word-count "\"That's the password: 'PASSWORD 123'\" cried the Special Agent.\nSo I fled.")
+                       '(("the" . 2)
+                         ("that's" . 1)
+                         ("special" . 1)
+                         ("so" . 1)
+                         ("password" . 2)
+                         ("i" . 1)
+                         ("fled" . 1)
+                         ("cried" . 1)
+                         ("agent" . 1)
+                         ("123" . 1)))))
+
+
 (provide 'word-count-test)
 ;;; word-count-test.el ends here
