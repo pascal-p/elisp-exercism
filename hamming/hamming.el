@@ -49,13 +49,13 @@ NOTE: resulting list  is in reverse order; it does not matter."
    (t (_zip (cdr l1) (cdr l2) (cons (cons (car l1) (car l2)) lr))))
   )
 
-(defun reduce (fn acc base lst)
+(defun ya-reduce (fn acc base lst)
   (if (= (length lst) 0) base
-    (acc (fn (car l)) (reduce fn acc base (cdr lst))))
+    (acc (fn (car l)) (ya-reduce fn acc base (cdr lst))))
   )
 
 ;; example - does not work!
-;; (reduce (lambda (x) (mismatch-counter x)) + 0 (zip '("A" "A" "B") '("A" "C" "B")))
+;; (ya-reduce (lambda (x) (mismatch-counter x)) + 0 (zip '("A" "A" "B") '("A" "C" "B")))
 
 (provide 'hamming)
 ;;; hamming.el ends here
