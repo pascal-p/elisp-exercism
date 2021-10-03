@@ -2,9 +2,9 @@
 
 Practicing elisp.
 
-Check https://exercism.io/tracks/julia
+Check https://exercism.io/tracks/emacs-lisp
 
-Sep 2021
+Sep-Oct 2021
 
 
 <hr />
