@@ -41,7 +41,7 @@ returns a string"
    ((and (or (string= ch "A") (string> ch "A"))
          (or (string= ch "Z") (string< ch "Z")))
     (char-to-string (+ ?A (% (+ (- (string-to-char ch) ?A) rotkey) LEN_ALPHA))))
-   ((string-match "[\s[:punct:][:digit:]]" ch) ch)
+   ((string-match "[[:space:][:punct:][:digit:]]" ch) ch)
    (t (throw 'Error "unsupported character")))
   )
 
