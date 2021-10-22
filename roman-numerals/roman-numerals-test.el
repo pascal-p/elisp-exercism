@@ -81,5 +81,16 @@
 (ert-deftest to-roman-2110 ()
   (should (equal (to-roman 2110) "MMCX")))
 
+;; exceptions
+
+(ert-deftest to-roman-negative ()
+  (should-error (to-roman -1)))
+
+(ert-deftest to-roman-zero ()
+  (should-error (to-roman 0)))
+
+(ert-deftest to-roman-overflow ()
+  (should-error (to-roman 3001)))
+
 (provide 'roman-numerals)
 ;;; roman-numerals-test.el ends here

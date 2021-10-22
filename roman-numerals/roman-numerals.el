@@ -9,9 +9,13 @@
         (6 . "VI") (7 . "VII") (8 . "VIII") (9 . "IX") (10 . "X")
         (50 . "L") (100 . "C") (500 . "D") (1000 . "M")))
 
-;; limit 3000
-
+;; limit 3000 to test
 (defun to-roman (num)
+  (if (or (<= num 0) (> num 3000))
+      (throw 'Error "0 <= num <= 3000")
+    (to-roman-fn num)))
+
+(defun to-roman-fn (num)
   (let* ((p 1000)
          (pair (divrem num p))
          (num (car pair))
@@ -64,7 +68,6 @@
 (repeat-string \"X\" 3) => \"XXX\"
 "
   (make-string num (string-to-char str)))
-
 
 (provide 'roman-numerals)
 ;;; roman-numerals.el ends here
