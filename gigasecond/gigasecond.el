@@ -57,8 +57,7 @@ yyyy year
            (yy- (cadr (cddr (cddr res))))
            )
       (progn
-        (to-localtime)
-        ;; res
+        ;; (to-localtime)
         (list s- m- h- dd- mm- yy-)
         ))))
 
