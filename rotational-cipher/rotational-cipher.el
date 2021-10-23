@@ -1,4 +1,4 @@
-;;; atbash-cipher.el --- Atbash-Cipher (exercism)
+;;; rotational-cipher.el --- Rotational-Cipher
 
 ;;; Commentary:
 

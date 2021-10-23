@@ -1,4 +1,4 @@
-;;; atbash-cipher-test.el --- Tests for Atbash Cipher (exercism)
+;;; rotational-cipher-test.el --- Tests for Rotational Cipher
 
 ;;; Commentary:
 
