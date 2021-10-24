@@ -155,5 +155,27 @@ Assume x > 0 && y > 0"
     (mapcar encode-fn txt-lst)
     ))
 
+;; macro
+
+(defmacro encode-ab (alpha beta txt)
+  "Create a version of encode gicen alpha and beta"
+  `(encode txt ,alpha ,beta)
+  )
+
+;; to see what happens:
+;; (macroexpand '(encode-ab 21 3 txt)) ;; == (encode txt 21 3)
+
+;; how to use it
+(defun encode-batch (txt-lst alpha beta)
+  (let ((encode-fn (lambda (txt)
+                     (encode-ab alpha beta txt)
+                     )))
+    (mapcar encode-fn txt-lst)
+    )
+  )
+
+;; assuming ltxt contain a list of texts to encode...
+;; (encode-batch ltxt 21 3)
+
 (provide 'affine-cipher)
 ;;; affine-cipher.el ends here
