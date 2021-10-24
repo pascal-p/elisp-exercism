@@ -46,8 +46,11 @@
                  (decode 6 "133714114238148966225439541018335470986172518171757571896261"))))
 
 ;; identity
+;; define ad-hoc all? hof
 (defun all? (pred-fn lst)
-  "return true iff all element of lst verified the predicate function pred-fn"
+  "Return true iff all elements of lst verified the predicate function pred-fn
+and false otherwise
+"
   (eval (cons 'and (mapcar pred-fn lst)))
   )
 

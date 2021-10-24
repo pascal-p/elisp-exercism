@@ -1,7 +1,6 @@
-;;; rail-cipher.el --- Atbash-Cipher (exercism)
+;;; rail-cipher.el --- Rail-Fence-Cipher
 
 ;;; Commentary:
-
 
 ;;; Code:
 (setq QMARK "?"
