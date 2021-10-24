@@ -80,6 +80,21 @@ What here shall miss, our toil shall strive to mend.
 (ert-deftest test-decode-obstacle ()
   (should (equal "anobstacleisoftenasteppingstone" (decode "qdwju nqcro muwhn odqun oppmd aunwd o" 19 16))))
 
+(ert-deftest test-decode-testing+ ()
+  (should (equal "testing123testing" (decode "odpoz ub123 odpoz ub" 25 7))))
+
+(ert-deftest test-decode-pangram-17-33()
+  (should (equal "thequickbrownfoxjumpsoverthelazydog" (decode "swxtj npvyk lruol iejdc blaxk swxmh qzglf" 17 33))))
+
+(ert-deftest test-decode-testing-pangram-19-13 ()
+  (should (equal "thequickbrownfoxjumpsoverthelazydog" (decode "kqlfd jzvgy tpaet icdhm rtwly kqlon ubstx" 19 13))))
+
+(ert-deftest test-decode-jolly+ ()
+  (should (equal "jollygreengiant" (decode "vszzm    cly   yd cg    qdp" 15 16))))
+
+(ert-deftest test-decode-testing-obstacle-2 ()
+  (should (equal "tgxknetbyjznxaejgtnejoozgrnexgj" (decode "AnObstacleIsOftenASteppingStone" 23 31))))
+
 ;; add more
 
 ;; Exception decode
@@ -97,22 +112,63 @@ What here shall miss, our toil shall strive to mend.
   "Return true iff all elements of lst verified the predicate function pred-fn
 and false otherwise
 "
-  (eval (cons 'and (mapcar pred-fn lst)))
-  )
+  (let* ((res (mapcar pred-fn lst))
+         (n (length res)))
+    (progn
+      (cond
+        ((= n 0) t)
+        ((= n 1) (setq res (cons t res)))
+        (t t))
+      (eval (cons 'and res))
+      )
+    ))
 
-;; (ert-deftest test-decode-encode-identity ()
-;;   (should
-;;    (all? (lambda (pair) (equal (car pair)
-;;                                (encode (cdr pair) (decode (cdr pair) (car pair)))))
-;;          '(("XOXOXOXOXOXOXOXOXO" . 2)
-;;            ("WEAREDISCOVEREDFLEEATONCE" . 3)
-;;            ("THEDEVILISINTHEDETAILS" . 3)
-;;            ("THEDEVILISINTHEDETAILS". 5)
-;;            ("133714114238148966225439541018335470986172518171757571896261" . 6)))
-;;    )
-;;   )
+(ert-deftest test-decode-encode-identity ()
+  (let ((alpha 21)
+        (beta 3))
+    (should
+     (all? (lambda (txt) (equal (downcase (mapconcat 'identity (filter->list txt) ""))
+                                (decode (encode txt alpha beta) alpha beta)))
+           '(
+             "yes"
+             "omg"
+             "OMG"
+             "mindblowingly"
+             "I M A G I N E!"
+             "Truth is fiction."
+             "The quick brown fox jumps over the lazy dog."
+             "Testing,1 2 3, testing."
+             "zmlyhgzxovrhlugvmzhgvkkrmthglmv"
+             "anobstacleisoftenasteppingstone"
+             "An obstacle is often a stepping stone"
+             ))
+     )))
+
+;; and the other way around!
+
+(ert-deftest test-encode-decode-identity ()
+  (let ((alpha 21)
+        (beta 3))
+    (should
+     (all? (lambda (txt) (equal txt
+                                (encode (decode txt alpha beta) alpha beta)))
+           '(
+             "njr"
+             "lvz"
+             "lvz"
+             "vpqoy alxpq zan"
+             "pvdzp qj"
+             "mwhmu prept mplq"
+             "mujbh ptfyw lxqel skhvg rlcjw mujad inolz"
+             "mjrmp qz123 mjrmp qz"
+             "ivanu zislc wuahz cviuz cffwv muzav c"
+             "dqlyr mdtaj prlem jqdrm jggpq zrmlq j"
+             "dqlyr mdtaj prlem jqdrm jggpq zrmlq j"
+             ))
+     )))
 
 ;; Other tests
+
 (ert-deftest test-gcd-36-48 ()
   (should (= 12 (gcd 36 48))))
 

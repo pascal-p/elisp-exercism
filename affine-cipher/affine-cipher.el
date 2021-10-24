@@ -147,5 +147,13 @@ Assume x > 0 && y > 0"
       r-lst
       )))
 
+;; pratical extension
+
+(defun encode-batch (txt-lst alpha beta)
+  "Apply encode on a list of source text with a specific alpha and beta values"
+  (let ((encode-fn (lambda (txt) (encode txt alpha beta))))
+    (mapcar encode-fn txt-lst)
+    ))
+
 (provide 'affine-cipher)
 ;;; affine-cipher.el ends here
