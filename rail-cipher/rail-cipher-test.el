@@ -1,13 +1,11 @@
-;;; raill-cipher-test.el --- Tests for Rail Cipher
+;;; rail-cipher-test.el --- Tests for Rail-Fence Cipher
 
 ;;; Commentary:
 
 ;;; Code:
-
 (load-file "rail-cipher.el")
 
-
-;; encode
+;; Encode
 (ert-deftest test-encode-1-rail ()
   (should (equal "One rail, only one rail" (encode 1 "One rail, only one rail"))))
 
@@ -23,12 +21,12 @@
 (ert-deftest test-encode-2-rails ()
   (should (equal "XXXXXXXXXOOOOOOOOO" (encode 2 "XOXOXOXOXOXOXOXOXO"))))
 
-;; exception encode
+;; Exception encode
 (ert-deftest test-encode-wirh-more-rails-than-letter-in-src ()
   (should-error (encode 24 "More rails than letters")))
 
 
-;; TODO: decode
+;; Decode
 (ert-deftest test-decode-empty-msg ()
   (should (equal "" (decode 5 ""))))
 
@@ -45,7 +43,8 @@
   (should (equal "112358132134558914423337761098715972584418167651094617711286"
                  (decode 6 "133714114238148966225439541018335470986172518171757571896261"))))
 
-;; identity
+;; Identity (decode o encode) == Id
+;;
 ;; define ad-hoc all? hof
 (defun all? (pred-fn lst)
   "Return true iff all elements of lst verified the predicate function pred-fn
@@ -66,12 +65,12 @@ and false otherwise
    )
   )
 
+;; Other tests
 (ert-deftest test-replace-mark ()
   (should (equal '(("F" "." "O" "." "A" ".")
                    ("." "O" "." "B" "." "R"))
                  (replace-mark '(("?" "." "?" "." "?" ".")
                                  ("." "?" "." "?" "." "?")) '("F" "O" "A" "O" "B" "R")))))
-
 (ert-deftest test-transpose ()
   (should (equal '(("F" ".") ("." "O") ("O" ".") ("." "B") ("A" ".") ("." "R"))
                  (transpose '(("F" "." "O" "." "A" ".") ("." "O" "." "B" "." "R"))))))
@@ -85,8 +84,6 @@ and false otherwise
   (should (equal '("X" "X" "X" "X" "X" "X" "X" "X" "X" "O" "O" "O" "O" "O" "O" "O" "O" "O")
                  (word-to-list "XXXXXXXXXOOOOOOOOO")))
   )
-
-;; other test helpers
 
 (ert-deftest test-init-rails ()
   (should (equal '(() () ()) (init-rails 3))))
