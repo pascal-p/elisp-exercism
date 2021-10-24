@@ -42,7 +42,7 @@
 (ert-deftest test-encode-pangram ()
   (should (equal "swxtj npvyk lruol iejdc blaxk swxmh qzglf" (encode  "The quick brown fox jumps over the lazy dog." 17 33))))
 
-(ert-deftest test-encode-rqndom ()
+(ert-deftest test-encode-random ()
   (should (equal "anobs tacle isoft enast eppin gston e" (encode "tgxknetbyjznxaejgtnejoozgrnexgj" 23 31))))
 
 (setq LongStr "
@@ -66,8 +66,11 @@ What here shall miss, our toil shall strive to mend.
   (should (equal "bixwe dxixv njixy snkxe ityzh jzgsz rgzel zgatz wmjwx gtdij wjdjy tlxvw nbjgj awxpt gbzjg erwvs rjkwj thexg jdpve zgldi jwjbz mzyky xxspt hjnbz mzyit gsnvg byjtg awxpa xweie ijate tyyxz gnxae ijnje dxaxj ntotz wxane twbwx nnsyx mjwne thjei jzwyz ajdix njpzn tsmjg evwso zejxv nxmjw eiwxd nsxei dzeie ijzws jteik vwlei jzwot wjgen newza jeija jtwav yotnn trjxa eijzw sjtei ptwhs yxmjt gseij bxgez gvtgb jxaei jzwot wjgen wtrjd izbik veeij zwbiz yswjg njgsg tvrie bxvys wjpxm jzngx deije dxixv wnewt aazbx axvwn etrje ijdiz bizal xvdze iotez jgejt wntee jgsdi teijw jnity ypznn xvwex zynit yynew zmjex pjgs" (encode LongStr 17 19))))
 
 ;; Exception encode
-;; (ert-deftest test-encode-with-exception ()
-;;   (should-error (encode "" alpha beta)))
+(ert-deftest test-encode-with-exception-1 ()
+  (should-error (encode "This is a test" 6 17))) ;; alpha and M no co-prime
+
+(ert-deftest test-encode-with-exception-2 ()
+  (should-error (encode "This is another test" 13 21))) ;; alpha and M no co-prime
 
 
 ;; Decode
