@@ -74,8 +74,20 @@ What here shall miss, our toil shall strive to mend.
 
 
 ;; Decode
-;; (ert-deftest test-decode-empty-msg ()
-;;   (should (equal "" (decode "" alpha beta))))
+(ert-deftest test-decode-ybty ()
+  (should (equal "test" (decode "ybty" 5 7))))
+
+(ert-deftest test-decode-obstacle ()
+  (should (equal "anobstacleisoftenasteppingstone" (decode "qdwju nqcro muwhn odqun oppmd aunwd o" 19 16))))
+
+;; add more
+
+;; Exception decode
+(ert-deftest test-decode-with-exception-1 ()
+  (should-error (decode "This is a test" 13 5))) ;; alpha and M no co-prime
+
+(ert-deftest test-decode-with-exception-2 ()
+  (should-error (decode "This is another test" 18 13))) ;; alpha and M no co-prime
 
 
 ;; Identity (decode o encode) == Id

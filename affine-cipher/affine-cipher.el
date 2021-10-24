@@ -14,8 +14,8 @@
         (t (gen-alist-fn (1+ ix)
                          (append al (list (cons (char-to-string (+ ?a ix)) ix)))
                          (append r-al (list (cons ix (char-to-string (+ ?a ix)))))
-                         ))
-        ))
+                         )))
+  )
 
 (setq M 26   ;; length of western alphabet
       LENGRP 5
@@ -40,18 +40,27 @@
   "D(y) = α-¹ × (y - β) ≡ m"
   (progn
     (check-coprime alpha)
-    ;; TODO...
-    )
+    (let* ((triplet (xgcd alpha M))
+           (alpha (cadr triplet))
+           (ltxt (filter->list src)) ;; only valid char are allowed: alnum class
+           (closure-translate (lambda (x)
+                                (translate x alpha beta '-)))
+           (plain (mapcar closure-translate ltxt)))
+      (mapconcat 'identity plain "")
+      ))
   )
+
+;; (% -7 26) == -7
+;; (mod -7 26) == 19
 
 (defun translate (x alpha beta op)
   (cond ((string-match "^[0-9]$" x) x)
-        ((equal op '+) (cdr (assoc (% (+ beta (* alpha
-                                                 (cdr (assoc (downcase x) L->IX))))
+        ((equal op '+) (cdr (assoc (% (+ (* alpha
+                                            (cdr (assoc (downcase x) L->IX))) beta)
                                       M) IX->L)))
-        ((equal op '-) (cdr (assoc (% (- beta (* alpha
-                                                 (cdr (assoc (downcase x) L->IX))))
-                                      M) IX->L)))
+        ((equal op '-) (cdr (assoc (mod (* alpha
+                                           (- (cdr (assoc (downcase x) L->IX)) beta)
+                                           ) M) IX->L)))
         (t (throw 'Error "operator not supported, expecting - or +")))
   )
 
@@ -65,18 +74,18 @@ ref. https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
      https://en.wikibooks.org/wiki/Algorithm_Implementation/Mathematics/Extended_Euclidean_algorithm
   "
   (let ((x0 0) (x1 1)
-        (y0 1) (y1 1))
+        (y0 1) (y1 0))
     (while (not (= 0 x))
       (setq dr (divrem y x)
             y x
             q (car dr)
             x (cdr dr))
       (setq n-y0 y1
-            n-y1 (- (* q y1) y0)
+            n-y1 (- y0 (* q y1))
             y0 n-y0
             y1 n-y1)
       (setq n-x0 x1
-            n-x1 (- (* q x1) x0)
+            n-x1 (- x0 (* q x1))
             x0 n-x0
             x1 n-x1)
       )
