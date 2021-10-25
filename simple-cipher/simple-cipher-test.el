@@ -42,8 +42,10 @@ The which if you with patient ears attend,
 What here shall miss, our toil shall strive to mend.
 ")
 
-;; (ert-deftest test-encode-long-sentence ()
-;;   (should (equal "bixwe dxixv njixy snkxe ityzh jzgsz rgzel zgatz wmjwx gtdij wjdjy tlxvw nbjgj awxpt gbzjg erwvs rjkwj thexg jdpve zgldi jwjbz mzyky xxspt hjnbz mzyit gsnvg byjtg awxpa xweie ijate tyyxz gnxae ijnje dxaxj ntotz wxane twbwx nnsyx mjwne thjei jzwyz ajdix njpzn tsmjg evwso zejxv nxmjw eiwxd nsxei dzeie ijzws jteik vwlei jzwot wjgen newza jeija jtwav yotnn trjxa eijzw sjtei ptwhs yxmjt gseij bxgez gvtgb jxaei jzwot wjgen wtrjd izbik veeij zwbiz yswjg njgsg tvrie bxvys wjpxm jzngx deije dxixv wnewt aazbx axvwn etrje ijdiz bizal xvdze iotez jgejt wntee jgsdi teijw jnity ypznn xvwex zynit yynew zmjex pjgs" (encode LongStr 17 19))))
+(ert-deftest test-encode-long-sentence ()
+  (should (equal '("ymznztqozbkocuwbydbfgfknpvccrhuetpikbdwbwttvogwfzpdkwwssrpituglyjyitymtzardscvrdofchbwiaaiyfqugaoopvawpyosksmsgyyslikupuunkmfexhimqcpwxhfmiytpiltaaosemrlgpflptvjizpypfkaqyxhnyqkjptisdhloqkxjpnvsgslumvanchocgdsvkohodyjxrzszqiuzntctgfgabvvpkpxbdxhpeczetkijkwtuvdwvfemxzwbmxbfgirpvffmuiucayyrpfyesfshuhtpmpexagheoekmqojuxrmmismjtichhblljmgcdpajggtakawlddggwdzbdvdwxasjbihturajrdraranivhxqymbxylnqoiwjigcsysaztqozbjcoxldlkpaettwxkuvssvvhdsevgbrtslmtaljltqttwhjlbhvgrkhmtkmqdkpznbkimpswvsjlejztvfuwteawumcijyz" .
+                   "wflwgxchlhskvglygcnmzfzffrupozorlwkcoywtfypeatwjslmgashstboccehlftrfmmgxsnqzwexaibbqxwyhmvujeansbqto")
+                 (encode LongStr "wflwgxchlhskvglygcnmzfzffrupozorlwkcoywtfypeatwjslmgashstboccehlftrfmmgxsnqzwexaibbqxwyhmvujeansbqto"))))
 
 ;; Exception encode
 ;; (ert-deftest test-encode-with-exception-1 ()
