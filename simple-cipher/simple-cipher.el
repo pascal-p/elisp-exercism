@@ -19,11 +19,11 @@
 
 (setq LEN-ALPHA 26   ;; length of western alphabet
       LEN-KEY 100    ;; length of (pseudo) random generated key
-      _pair (gen-alist)                                                                 
-      L->IX (car _pair)                                                                 
-      IX->L (cadr _pair))                                                               
-                                                                                        
-;; encode / decode 
+      _pair (gen-alist)
+      L->IX (car _pair)
+      IX->L (cadr _pair))
+
+;; encode / decode
 ;; NOTE: we deal only with letters in [a-x] / class [:alpha:] - no digits
 
 (defun encode (txt &optional key)
