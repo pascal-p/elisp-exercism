@@ -24,20 +24,23 @@
       IX->L (cadr _pair))                                                               
                                                                                         
 ;; encode / decode 
+;; NOTE: we deal only with letters in [a-x] / class [:alpha:] - no digits
 
 (defun encode (txt &optional key)
   "Returns a pair (encoded message . key)"
   (if (= 0 (length txt)) txt
     ;; else
     (progn
-      (if (equal key nil) (setq key (init-key)))
+      (if (equal key nil) (setq key (init-key))
+        ;; else check validity of key
+        (check-key-validity key))
       (let* ((len-key (length key))
              (cl-encode-fn (lambda (pair)
                              (let* ((curr-ch (car pair))
                                     (ix (cdr pair)))
                                (encode-fn ix curr-ch key len-key))
                              )))
-
+        ;; result
         (list->pair
          (mapcar cl-encode-fn (enum-filtered-text txt))
          key)
@@ -46,11 +49,32 @@
     )
   )
 
-(defun decode (txt &optional key)
-  ;; TODO
+(defun decode (txt key)
+  "Returns the pair <decoded txt (aka ciphered txt), key> using key for the decoding"
+  (progn
+    (check-key-validity key)
+    (let* ((len-key (length key))
+           (cl-decode-fn (lambda (pair)
+                           (let* ((curr-ch (car pair))
+                                  (ix (cdr pair)))
+                             (decode-fn ix curr-ch key len-key))
+                           )))
+      ;; result
+      (list->pair
+       (mapcar cl-decode-fn (enum-filtered-text txt))
+       key)
+      )
+    )
   )
 
 ;; helpers
+
+(defun check-key-validity (key)
+  (or
+   (and (>= (length key) 3)  ;; min length key of 3 (arbitrary)
+        (string-match "^[[:alpha:]]+$" key))
+   (throw 'Error "key must be composed only of at least 3 letters in [a-z]"))
+  )
 
 (defun init-key ()
   "Generate a (pseudo) random key of len LEN-KEY"
@@ -64,6 +88,7 @@
     )
   )
 (defun list->pair (ltxt key)
+  "(list->pair '(\"f\" \"o\" \"o\" \"b\" \"a\" \"r\") \"keyinuse\") => (\"foobar\" . \"keyinuse\")"
   (cons (mapconcat 'identity
                    ltxt
                    "")
@@ -84,8 +109,11 @@ Returns a list of pairs ((letter . 0) (letter' . 1) (letter'' . 2) ....)
   )
 
 (defun filter->list (src)
+  "Example: (filter->list \"Foo Bar!!!\") => '(\"f\" \"o\" \"o\" \"b\" \"a\" \"r\")"
   (delete ""
-          (split-string (replace-regexp-in-string "[^[:alnum:]]" "" src) ""))
+          (split-string
+           (downcase (replace-regexp-in-string "[^[:alpha:]]" "" src))
+           ""))
   )
 
 (defun decode-fn (ix curr-ch key len-key)

@@ -56,20 +56,17 @@ What here shall miss, our toil shall strive to mend.
 
 
 ;; Decode
-;; (ert-deftest test-decode-ybty ()
-;;   (should (equal "test" (decode "ybty" 5 7))))
+(ert-deftest test-decode-panda ()
+  (should (equal '("iamapandabear" . "aaaa")
+                 (decode "iamapandabear" "aaaa"))))
 
-;; (ert-deftest test-decode-obstacle ()
-;;   (should (equal "anobstacleisoftenasteppingstone" (decode "qdwju nqcro muwhn odqun oppmd aunwd o" 19 16))))
-
+(ert-deftest test-decode-irf ()
+  (should (equal '("freewillisnothingbutanillusion" . "dabc")
+                 (decode "irfgzimnlsoqwhjpjbvvdnjnoutkrn" "dabc"))))
 
 ;; Exception decode
-;; (ert-deftest test-decode-with-exception-1 ()
-;;   (should-error (decode "This is a test" 13 5))) ;; alpha and M no co-prime
-
-;; (ert-deftest test-decode-with-exception-2 ()
-;;   (should-error (decode "This is another test" 18 13))) ;; alpha and M no co-prime
-
+(ert-deftest test-decode-with-exception-1 ()
+  (should-error (decode "This is a test" "----")))
 
 ;; Identity (decode o encode) == Id
 ;;
@@ -89,51 +86,38 @@ and false otherwise
       )
     ))
 
-;; (ert-deftest test-decode-encode-identity ()
-;;   (let ((alpha 21)
-;;         (beta 3))
-;;     (should
-;;      (all? (lambda (txt) (equal (downcase (mapconcat 'identity (filter->list txt) ""))
-;;                                 (decode (encode txt alpha beta) alpha beta)))
-;;            '(
-;;              "yes"
-;;              "omg"
-;;              "OMG"
-;;              "mindblowingly"
-;;              "I M A G I N E!"
-;;              "Truth is fiction."
-;;              "The quick brown fox jumps over the lazy dog."
-;;              "Testing,1 2 3, testing."
-;;              "zmlyhgzxovrhlugvmzhgvkkrmthglmv"
-;;              "anobstacleisoftenasteppingstone"
-;;              "An obstacle is often a stepping stone"
-;;              ))
-;;      )))
+(ert-deftest test-decode-encode-identity ()
+  (let ((key "wflwgxchlhskvglygcnmzfzffrupozorlwkcoywtfypeatwjslmgashstboccehlftrf"))
+    (should
+     (all? (lambda (txt) (equal (downcase (mapconcat 'identity (filter->list txt) ""))
+                                (car (decode (car (encode txt key)) key))))
+           '(
+             "yes"
+             "omg"
+             "OMG"
+             "mindblowingly"
+             "I M A G I N E!"
+             "Truth is fiction."
+             "The quick brown fox jumps over the lazy dog."
+             "Testing, 1 2 3, testing."
+             "zmlyhgzxovrhlugvmzhgvkkrmthglmv"
+             "anobstacleisoftenasteppingstone"
+             "An obstacle is often a stepping stone"
+             ))
+     )))
 
-;; and the other way around!
-
-;; (ert-deftest test-encode-decode-identity ()
-;;   (let ((alpha 21)
-;;         (beta 3))
-;;     (should
-;;      (all? (lambda (txt) (equal txt
-;;                                 (encode (decode txt alpha beta) alpha beta)))
-;;            '(
-;;              "njr"
-;;              "lvz"
-;;              "lvz"
-;;              "vpqoy alxpq zan"
-;;              "pvdzp qj"
-;;              "mwhmu prept mplq"
-;;              "mujbh ptfyw lxqel skhvg rlcjw mujad inolz"
-;;              "mjrmp qz123 mjrmp qz"
-;;              "ivanu zislc wuahz cviuz cffwv muzav c"
-;;              "dqlyr mdtaj prlem jqdrm jggpq zrmlq j"
-;;              "dqlyr mdtaj prlem jqdrm jggpq zrmlq j"
-;;              ))
-;;      )))
+;; TODO: and the other way around!
 
 ;; Other tests
+
+(ert-deftest test-list->pair ()
+  (should (equal '("foobar" . "keyinuse")
+                 (list->pair '("f" "o" "o" "b" "a" "r") "keyinuse")))
+  )
+
+(ert-deftest test-enum-filtered-text ()
+  (should (equal '(("f" . 0) ("o" . 1) ("o" . 2) ("b" . 3) ("a" . 4) ("r" . 5))
+                 (enum-filtered-text "Foo Bar!!!"))))
 
 (provide 'simple-cipher-test)
 ;; simplel-cipher-test.el ends here
