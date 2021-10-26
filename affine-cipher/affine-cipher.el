@@ -64,6 +64,30 @@
         (t (throw 'Error "operator not supported, expecting - or +")))
   )
 
+(defmacro psetq (x y n-x n-y)
+  "(parallel) pair setq
+Examples:
+(setq b 10
+      x 3
+      y 4)
+
+(setq x (* y b)   ;; x = 40
+      y x)        ;; y = 40
+
+;; however
+(psetq x y (* y b) x)  ;;  x = 40 and y = 3
+"
+  (let ((tmpvar-x (make-symbol "tvar1"))
+        (tmpvar-y (make-symbol "tvar2")))
+    `(let ((,tmpvar-x ,n-x)
+           (,tmpvar-y ,n-y))
+
+       (setf ,x ,tmpvar-x
+             ,y ,tmpvar-y)
+      )
+    )
+  )
+
 (defun xgcd (x y)
   "Extended GCD(x, y) == α * x + β * y == g
 
@@ -80,14 +104,10 @@ ref. https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
             y x
             q (car dr)
             x (cdr dr))
-      (setq n-y0 y1
-            n-y1 (- y0 (* q y1))
-            y0 n-y0
-            y1 n-y1)
-      (setq n-x0 x1
-            n-x1 (- x0 (* q x1))
-            x0 n-x0
-            x1 n-x1)
+      (psetq y0 y1
+             y1 (- y0 (* q y1)))
+      (psetq x0 x1
+             x1 (- x0 (* q x1)))
       )
     (list y x0 y0)
     )

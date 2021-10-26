@@ -185,13 +185,20 @@ and false otherwise
   (should (equal 76 (gcd 3116 2052))))
 
 ;;
-
 (ert-deftest test-grouping ()
   (should (equal'("FOOBA" "RBA") (grouping '("F" "O" "O" "B" "A" "R" "B" "A")))))
 
 (ert-deftest test-grouping-foo ()
   (should (equal'("FOO") (grouping '("F" "O" "O")))))
 
+;; test macro
+(ert-deftest test-macro-psetq ()
+  (let ((b 10)
+        (x 3)
+        (y 4))
+    (should (equal '(40 3) (progn
+                             (psetq x y (* y b) x)
+                             (list x y))))))
 
 (provide 'affine-cipher-test)
 ;; affinel-cipher-test.el ends here
