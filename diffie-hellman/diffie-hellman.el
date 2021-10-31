@@ -42,7 +42,7 @@
                  (prime t)
                  (cp 5))
              (while (and prime (< cp n))
-               (if (or (= 0 (% p cp)) (= 0 (% p (+ p 2)))) (setq prime nil))
+               (if (or (= 0 (% p cp)) (= 0 (% p (+ cp 2)))) (setq prime nil))
                (setq cp (+ 6 cp)))
              prime))))
 
