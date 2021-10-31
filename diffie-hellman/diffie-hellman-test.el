@@ -5,8 +5,6 @@
 ;;; Code:
 (load-file "diffie-hellman.el")
 
-
-;; TODO
 (ert-deftest test-can-calculate-pubkey-using-privkey ()
   (let ((p 23)
         (g 5)
@@ -15,7 +13,7 @@
     (should (equal exp (public-key p g privkey)))
     ))
 
-(ert-deftest test-can-calculate-secret-using-other-party-s-public-key ()
+(ert-deftest test-can-calculate-secret-using-other-party-pubkey ()
   (let ((p 23)
         (their-pub-key 19)
         (our-priv-key 6)
@@ -24,17 +22,64 @@
     )
   )
 
-(ert-deftest test-key-exchange ()
-  (let* ((p 23)
-         (g 5)
-         (alice-priv-key (private-key p))
-         (bob-priv-key (private-key p))
-         (alice-pub-key (public-key p g alice-priv-key))
-         (bob-pub-key (public-key p g bob-priv-key))
-         (secret-a (secret p bob-pub-key alice-priv-key))
-         (secret-b (secret p alice-pub-key bob-priv-key)))
-    (should (equal secret-a secret-b))
+(ert-deftest test-can-calculate-pubkey-using-privkey-2 ()
+  (let ((p 2951) ;; was  29501
+        (g 8713)
+        (priv-key 2931) ;; 29331
+        (exp 2757)) ;; 15518
+    (should (= exp (public-key p g priv-key)))
     ))
+
+(ert-deftest test-can-calculate-secret-using-other-party-pubkey-2()
+(let ((p 3967)             ;; was 29501
+      (their-pub-key 3017) ;; was 8017
+      (our-priv-key 3849)  ;; was 8849
+      (exp 1015)) ;; was 184
+  (should (= exp (secret p their-pub-key our-priv-key)))
+  ))
+
+(ert-deftest test-key-exchange ()
+  (let* ((pairs '((23 . 5) (43 . 47) (1483 . 1553)))
+         (p (car (car pairs)))
+         (g (cdr (car pairs)))
+         (res t))
+    (while (and res (> (length pairs) 1))
+      (setq pair-sec-a-sec-b (key-exchange-fn p g)
+            sec-a (car pair-sec-a-sec-b)
+            sec-b (cdr pair-sec-a-sec-b)
+            res (equal sec-a sec-b)
+            pairs (cdr pairs)
+            p (car (car pairs))
+            g (cdr (car pairs)))
+      )
+    ;; last one
+    (let* ((p (car (car pairs)))
+           (g (cdr (car pairs)))
+           (pair-sec-a-sec-b (key-exchange-fn p g))
+           (sec-a (car pair-sec-a-sec-b))
+           (sec-b (cdr pair-sec-a-sec-b)))
+      (should (and res (equal sec-a sec-b)))
+      )
+    )
+  )
+
+(ert-deftest test-private-key-in-range-1-p ()
+  (let* ((primes '(100000937 100000939 100000963 100000969 100001029 100001053 100001059 100001081 100001087 100001107
+                             100001119 100001131 100001147 100001159 100001177 100001183 100001203 100001207 100001219 100001227))
+         (p (car primes))
+         (priv-key (private-key p)))
+    (while (and (> (length primes) 1) (> priv-key 1) (< priv-key p))
+      (setq primes (cdr primes)
+            p (car primes)
+            priv-key (private-key p))
+      )
+    ;; check that last priv key satisfies the constraiants
+    (let* ((last-p (car primes))
+           (last-priv-key (private-key last-p)))
+      (should (and (> priv-key 1) (< priv-key p)))
+      )
+    )
+  )
 
 ;; Exception
 
@@ -112,6 +157,19 @@
 
 (ert-deftest test-is-not-prime-1073741824 ()
   (should (not (is-prime? 1073741824))))
+
+;; helpers
+
+(defun key-exchange-fn (p g)
+  (let* ((alice-privkey (private-key p))
+         (bob-privkey (private-key p))
+         (alice-pubkey (public-key p g alice-privkey))
+         (bob-pubkey (public-key p g bob-privkey))
+         (secret-a (secret p bob-pubkey alice-privkey))
+         (secret-b (secret p alice-pubkey bob-privkey)))
+    (cons secret-a secret-b)
+    )
+  )
 
 (provide 'diffie-hellman-test)
 ;; diffie-hellman-test.el ends here

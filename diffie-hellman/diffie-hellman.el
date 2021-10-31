@@ -11,7 +11,7 @@
 (defun public-key (p g priv)
   (progn
     (check-key priv p)
-    (% (expt g priv) p)))
+    (% (expt g priv) p))) ;; can and will overflow!
 
 ;;
 ;; Function: expt x y
@@ -23,7 +23,7 @@
   (progn
     (check-key priv p)
     (check-key pub p)
-    (% (expt pub priv) p)))
+    (% (expt pub priv) p))) ;; can and will overflow!
 
 (defun check-factor (p)
   (if (or (< p 2) (not (is-prime? p))) (throw 'Error "p must prime > 2")
