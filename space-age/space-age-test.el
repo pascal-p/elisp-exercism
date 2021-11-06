@@ -1,4 +1,4 @@
-;;; space-age-test.el --- Tests for Affine Cipher
+;;; space-age-test.el --- Tests for Space Age
 
 ;;; Commentary:
 
@@ -7,7 +7,6 @@
 
 (setq EPS 0.01)
 
-;; Encode
 (ert-deftest test-age-on-earth ()
   (should (within-eps 31.69 (space-age-on-earth 1000000000))))
 
@@ -36,4 +35,4 @@
   (<= (abs (- act exp)) EPS))
 
 (provide 'space-age-test)
-;; affinel-cipher-test.el ends here
+;; space-age-test.el ends here
