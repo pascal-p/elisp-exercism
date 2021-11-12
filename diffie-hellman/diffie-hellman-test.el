@@ -1,4 +1,4 @@
-;;; diffie-hellman-test.el --- Tests for Affine Cipher
+;;; diffie-hellman-test.el --- Tests for Diffie-Hellman Cipher
 
 ;;; Commentary:
 
