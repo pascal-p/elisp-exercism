@@ -1,4 +1,4 @@
-;;; diffie-hellman.el --- Affine-Cipher
+;;; diffie-hellman.el --- Diffie-Hellman
 
 ;;; Commentary:
 
@@ -59,4 +59,4 @@ from ≤ r ≤ to"
       )))
 
 (provide 'diffie-hellman)
-;;; diffie-helman.el ends here
+;;; diffie-hellman.el ends here
