@@ -79,17 +79,17 @@
                  '(0 0 0 0))))
 
 (ert-deftest test-ya-str-to-dlist-1 ()
-  (should (equal (ya-str-to-dlist "1  23 4" t)
+  (should (equal (ya:str-to-dlist "1  23 4" t)
                  '(1 2 3 4)))
   )
 
 (ert-deftest test-ya-str-to-dlist-nil1 ()
-  (should (equal (ya-str-to-dlist "1  23 4")
+  (should (equal (ya:str-to-dlist "1  23 4")
                  '(1 0 0 2 3 0 4)))
   )
 
 (ert-deftest test-ya-str-to-dlist-nil2 ()
-  (should (equal (ya-str-to-dlist "1  23 4" nil)
+  (should (equal (ya:str-to-dlist "1  23 4" nil)
                  '(1 0 0 2 3 0 4)))
   )
 
