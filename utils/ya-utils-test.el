@@ -94,3 +94,66 @@
 (ert-deftest test-ya-mklist-3b ()
   (should (equal '(t nil) (ya:mklist '(t nil))))
   )
+
+;; ya:longer
+(ert-deftest test-ya-longer-1 ()
+  (should (ya:longer '(t nil nil t nil) '()))
+  )
+
+(ert-deftest test-ya-longer-2 ()
+  (should (not (ya:longer '(1 2 3) '(3 2 1))))
+  )
+
+(ert-deftest test-ya-longer-3 ()
+  (should (not (ya:longer '(1 2 3) '(3 2 1 a b c))))
+  )
+
+(ert-deftest test-ya-longer-4 ()
+  (should (ya:longer '(1 2 3 b a c) '(a b c)))
+  )
+
+(ert-deftest test-ya-longer-5a ()
+  (should (ya:longer "123bac" "abc")))
+
+(ert-deftest test-ya-longer-5b ()
+  (should (not (ya:longer "bac" "a1b2c3"))))
+
+(ert-deftest test-ya-longer-5c ()
+  (should (not (ya:longer "bar" "foo"))))
+
+;; ya:filter
+(ert-deftest test-ya-filter-1 ()
+  (let* ((even-fn (lambda (x) (and (= 0 (% x 2)) x)))
+         (res (ya:filter even-fn '(7 6 5 8 3 4 2 1 0 9)))
+         )
+    (should (equal '(6 8 4 2 0) res))
+    ))
+
+(ert-deftest test-ya-filter-2 ()
+  (should (equal '(7 6 5 8 4 9)
+                 (let ((gt3-fn (lambda (x) (and (> x 3) x))))
+                   (ya:filter gt3-fn '(7 6 5 8 3 4 2 1 0 9))))
+          ))
+
+(ert-deftest test-ya-filter-3 ()
+  (should (equal '(3 2 1 0)
+                 (let ((gt3-fn (lambda (x) (and (not (> x 3)) x))))
+                   (ya:filter gt3-fn '(7 6 5 8 3 4 2 1 0 9))))
+          ))
+
+;; ya:group
+(ert-deftest test-ya-group-1 ()
+  (should (equal '((a) (b) (c) (d) (e) (f) (g)) (ya:group '(a b c d e f g) 1)))
+  )
+
+(ert-deftest test-ya-group-2 ()
+  (should (equal '((a b) (c d) (e f) (g))  (ya:group '(a b c d e f g) 2)))
+  )
+
+(ert-deftest test-ya-group-3 ()
+  (should (equal '((a b c) (d e f) (g)) (ya:group '(a b c d e f g) 3)))
+  )
+
+(ert-deftest test-ya-group-error ()
+  (should-error (ya:group '(a b c d e f g) 0))
+  )
