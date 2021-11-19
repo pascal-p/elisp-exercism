@@ -3,6 +3,8 @@
 ;;; Commentary:
 
 ;;; Code:
+(require 'cl-lib)
+
 (defun hamming-distance (str-a str-b)
   (cond
    ((not (equal (length str-a) (length str-b))) (throw 'Error "input strings must have dame length"))
@@ -36,26 +38,23 @@ if mismatch on the pair (p) return 1 else 0"
 (defun zip (l1 l2)
   "merging two lists of equal length into one list of pairs
 (zip '(1 2 3) '(\"a\" \"b\" \"c\")) -> ((3. \"a\") (2 .\"b\") (1 . \"a\")))
-NOTE: resulting list  is in reverse order; it does not matter."
+NOTE: resulting list is in reverse order; it does not matter."
   (cond
    ((or (not (listp l1)) (not (listp l2))) (throw 'Error "l1 and l2 should be 2 list of same length"))
    ((not (equal (length l1) (length l2))) (throw 'Error "l1 and l2 should be 2 list of same length"))
-   (t (_zip l1 l2 '())))
+   (t (cl-labels ((:_zip-fn (l1: l2: lr:)
+                            (if (null l1:) lr:
+                              (:_zip-fn (cdr l1:) (cdr l2:) (cons (cons (car l1:) (car l2:)) lr:)))))
+        (:_zip-fn l1 l2 '()))))
   )
 
-(defun _zip (l1 l2 lr)
-  (cond
-   ((= (length l1) 0) lr)
-   (t (_zip (cdr l1) (cdr l2) (cons (cons (car l1) (car l2)) lr))))
-  )
-
-(defun ya-reduce (fn acc base lst)
+(defun reduce (fn acc base lst)
   (if (= (length lst) 0) base
-    (acc (fn (car l)) (ya-reduce fn acc base (cdr lst))))
+    (acc (fn (car l)) (reduce fn acc base (cdr lst))))
   )
 
 ;; example - does not work!
-;; (ya-reduce (lambda (x) (mismatch-counter x)) + 0 (zip '("A" "A" "B") '("A" "C" "B")))
+;; (reduce (lambda (x) (mismatch-counter x)) + 0 (zip '("A" "A" "B") '("A" "C" "B")))
 
 (provide 'hamming)
 ;;; hamming.el ends here
