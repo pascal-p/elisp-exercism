@@ -10,26 +10,23 @@
 
 (defun square-enc (str)
   (if (= 1 (length str)) str
-    (str-extract (_square-enc (find-cr (length str)) str))) ;; todo
-)
-
-(defun _square-enc (cr str)
-  (let* ((c (car cr))
-         (r (cdr cr))
-         (ix 0)
-         (s-ix 0)
-         (e-ix c)
-         (n (length str))
-         (r-lst '()))
-    (while (< ix r)
-      ;; if len of substring < c => pad with space character
-      (setq r-lst (append r-lst (list (sub-str-n str s-ix e-ix c))))
-      (setq s-ix (+ s-ix c))
-      (setq e-ix (min (+ e-ix c) n))
-      (setq ix (1+ ix))
-      )
-    (cons r-lst c)
-    )
+    ;; (str-extract (_square-enc (find-cr (length str)) str))
+    (let* ((cr (find-cr (length str)))
+           (c (car cr))
+           (r (cdr cr))
+           (ix 0)
+           (s-ix 0)
+           (e-ix c)
+           (n (length str))
+           (r-lst '()))
+      (while (< ix r)
+        ;; if len of substring < c => pad with space character
+        (setq r-lst (append r-lst (list (substr-n str s-ix e-ix c)))
+              s-ix (+ s-ix c)
+              e-ix (min (+ e-ix c) n)
+              ix (1+ ix)))
+        (str-extract (cons r-lst c))
+    ))
   )
 
 (defun str-extract (lst-c)
@@ -40,10 +37,10 @@
          (enc-lst '())
          (n (length s-lst)))
     (while (< ix c)
-      ;; (setq str-enc (concat str-enc (str-extract-by-index s-lst ix)))
-      (setq enc-lst (append enc-lst (list (mapconcat 'identity (mapcar fn s-lst) ""))))
-      (setq ix (1+ ix))
-      )
+      (setq enc-lst (append enc-lst
+                            (list (mapconcat 'identity (mapcar fn s-lst) "")))
+            ix (1+ ix)
+      ))
     ;; (replace-regexp-in-string "\s+" ""  str-enc)
     (mapconcat 'identity enc-lst " "))
   )
@@ -62,21 +59,19 @@ c x r is >= l (length of string to encode)"
     (if (>= (* r r) n) (setq c r)) ;; perfect square
     (cons c r)))
 
-(defun sub-str-n (str from to n)
+(defun substr-n (str from to n)
   (let* ((s-str (substring str from to))
          (len-str (length s-str))
          (diff (- n len-str)))
     (if (= 0 diff) s-str
-      (str-pad s-str diff))
-    ))
+      (str-pad s-str diff))))
 
 (defun str-pad (str n)
   "pad given str with n \" \" (space) char"
   (let ((ix 0))
     (while (< ix n)
-      (setq str (concat str " "))
-      (setq ix (1+ ix))
-      )
+      (setq str (concat str " ")
+            ix (1+ ix)))
     str
     )
   )

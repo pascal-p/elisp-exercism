@@ -66,17 +66,17 @@
 
 ;;
 
-(ert-deftest test-sub-str-n-final ()
+(ert-deftest test-substr-n-final ()
   (should (equal "sroots  "
-                 (sub-str-n "ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots" 48 54 8))))
+                 (substr-n "ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots" 48 54 8))))
 
-(ert-deftest test-sub-str-n-first ()
+(ert-deftest test-substr-n-first ()
   (should (equal "ifmanwas"
-                 (sub-str-n "ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots" 0 8 8))))
+                 (substr-n "ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots" 0 8 8))))
 
-(ert-deftest test-sub-str-n-second ()
+(ert-deftest test-substr-n-second ()
   (should (equal "meanttos"
-                 (sub-str-n "ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots" 8 16 8))))
+                 (substr-n "ifmanwasmeanttostayonthegroundgodwouldhavegivenusroots" 8 16 8))))
 
 
 (provide 'crypto-square-test)
