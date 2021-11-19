@@ -157,3 +157,46 @@
 (ert-deftest test-ya-group-error ()
   (should-error (ya:group '(a b c d e f g) 0))
   )
+
+
+;; ya:flatten
+(ert-deftest test-ya-flatten-1 ()
+  (should (equal '(a b c d e f g) (ya:flatten '((a) (b) (c) (d) (e) (f) (g)))))
+  )
+
+(ert-deftest test-ya-flatten-2-id ()
+  (should (equal '(a b c d e f g) (ya:flatten '(a b c d e f g))))
+  )
+
+(ert-deftest test-ya-flatten-3-id ()
+  (should (equal '() (ya:flatten '())))
+  )
+
+(ert-deftest test-ya-flatten-4 ()
+  (should (equal '() (ya:flatten '(() (()) () (() ()) ((() (())))) )))
+  )
+
+;; ya:prune
+(ert-deftest test-ya-prune-1a ()
+  (let* ((odd-fn (lambda (x) (= 1 (% x 2))))
+         (res (ya:prune odd-fn '(1 2 (3 (4 5) 6) 7 8 (9)))))
+    (should (equal '(() 8 (6 (4)) 2) res))
+    ))
+
+(ert-deftest test-ya-prune-1b ()
+  (let* ((odd-fn (lambda (x) (= 1 (% x 2))))
+         (res (ya:prune odd-fn '(1 2 (3 (4 5) 6) 7 8 (9 10)))))
+    (should (equal '((10) 8 (6 (4)) 2) res))
+    ))
+
+(ert-deftest test-ya-prune-2a ()
+  (let* ((even-fn (lambda (x) (= 0 (% x 2))))
+         (res (ya:prune even-fn '(1 2 (3 (4 5) 6) 7 8 (10)))))
+    (should (equal '(() 7 ((5) 3) 1) res))
+    ))
+
+(ert-deftest test-ya-prune-2b ()
+  (let* ((even-fn (lambda (x) (= 0 (% x 2))))
+         (res (ya:prune even-fn '(1 2 (3 (4 5) 6) 7 8 (9)))))
+    (should (equal '((9) 7 ((5) 3) 1) res))
+    ))

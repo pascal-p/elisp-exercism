@@ -60,9 +60,8 @@ standard Lisp idiom for accumulating a list."
     ;; finally re-order n-lst - in linear time
     (nreverse n-lst)))
 
-
 (defun ya:group (src n)
-  "note: internal rec-fn is tail recursive"
+  "Note: internal rec-fn is tail recursive"
   (if (zerop n) (error "zero length")
     (cl-labels
         ((:rec-fn (src gp-lst)
@@ -73,3 +72,27 @@ standard Lisp idiom for accumulating a list."
       (if src (:rec-fn src nil)
         nil))
     ))
+
+(defun ya:flatten (llst)
+  (cl-labels
+      ((:_flatten-fn (lst: nlst:)
+                     (cond
+                      ((null lst:) nlst:)
+                      ((atom lst:) (cons lst: nlst:))
+                      (t (:_flatten-fn (car lst:) (:_flatten-fn (cdr lst:) nlst:))))))
+    (:_flatten-fn llst '()))
+  )
+
+(defun ya:prune (pred-fn tree)
+  "A tree is a nested list - Hence prune is acting on all nested lists"
+  (cl-labels
+      ((:prune-fn (tree: ntree:)
+                  (cond
+                   ((null tree:) ntree:) ;; we are done
+                   ((consp (car tree:)) (:prune-fn (cdr tree:)
+                                                   (cons (:prune-fn (car tree:) '()) ntree:))) ;; nested-tree - recurse
+                   (t (:prune-fn (cdr tree:)
+                                 (if (funcall pred-fn (car tree:)) ntree:
+                                   (cons (car tree:) ntree:)))))))
+    (:prune-fn tree '()))
+  )
