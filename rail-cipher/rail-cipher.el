@@ -11,7 +11,7 @@
   (cond
    ((= (length src) 0) src)
    ((or (< n 1) (>= n (length src)))
-    (throw 'Error "1 < n < length(src)")) ;; slightly incorrect as the space between word does not count
+    (throw 'Error "1 < n < length(src)")) ;; slightly incorrect as the space between words does not count
    ((= 1 n) src)
    (t (mapconcat 'identity
                  (cat-rails (encode-fn n src)) "")))
@@ -39,7 +39,7 @@ Optional argument switch is used to toggle the behaviour of encode-fn:
          (rix 0)
          (desc t)
          (op-fn '+)
-         ;; closure:
+         ;; closure with side-effect
          (distribute (lambda (l)
                        (progn
                          (and (not (equal switch nil)) (setq l QMARK)) ;; overwrite l
@@ -139,7 +139,7 @@ Returns the updated rails
 
 (defun replace-mark-fn (rail src n-rail)
   "Returns a list of 2 sub-lists"
-  (cond ((= 0 (length rail)) (list src n-rail))
+  (cond ((null rail) (list src n-rail))
         ;; match
         ((equal QMARK (car rail))
          (replace-mark-fn (cdr rail)
@@ -172,7 +172,7 @@ Returns the updated rails
           (split-string (replace-regexp-in-string "[^[:alnum:]]" "" src) ""))
   )
 
-(defun transpose (llst)
+(defsubst transpose (llst)
   "From '((\"F\" \".\" \"O\" \".\" \"A\" \".\")
           (\".\" \"O\" \".\" \"B\" \".\" \"R\")))
 To:
@@ -187,8 +187,7 @@ To:
     (let* ((n (length (car llst))) ;; all sublists of llst assumed to be of same length
           (ix 0)
           (r-lst '())
-          (n-th (lambda (lst)
-                  (nth ix lst))))
+          (n-th (lambda (lst) (nth ix lst))))
       (while (< ix n)
         (setq s-lst (mapcar n-th llst)
               ix (1+ ix)
