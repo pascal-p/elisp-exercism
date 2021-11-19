@@ -3,7 +3,6 @@
 ;;; Commentary:
 
 
-
 ;;; Code:
 (setq base
       '(("G" . "C")
@@ -20,11 +19,11 @@ ref. http://ergoemacs.org/emacs/elisp_string_functions.html"
    (t (multi-symb dna-strand)))
   )
 
+
 (defun single-symb (dna-symb)
-  (progn
-    (setq res (cdr (assoc dna-symb base)))
-    (or (and (boundp 'res) res)
-        (throw 'Error "not such key")))
+    (let ((res (cdr (assoc dna-symb base))))
+      (or (and (boundp 'res) res)
+          (throw 'Error "not such key")))
   )
 
 (defun multi-symb (dna-strand)
