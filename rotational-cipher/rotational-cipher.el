@@ -6,6 +6,11 @@
 ;;; Code:
 (setq LEN_ALPHA 26)
 
+(defmacro map-char-if (ch from to)
+  `(and (or (string= ,ch ,from) (string> ,ch ,from))
+        (or (string= ,ch ,to) (string< ,ch ,to))))
+
+;; entry point
 (defun rotate (plaintext rotkey)
   "Encode plaintext with rotational-cipher encoding, given rotkey"
   (cond
@@ -16,36 +21,38 @@
   )
 
 (defun encode-msg (plaintext rotkey)
-  (let ((encode-word-closure
+  ;; define a closure
+  (let ((closure:encode-word
          (lambda (word) (encode-word word rotkey))))
     (string-join
-     (mapcar encode-word-closure (split-string plaintext " "))
+     (mapcar closure:encode-word (split-string plaintext " "))
      " ")
     ))
 
 (defun encode-word (word rotkey)
   (let ((encode-char
-         (lambda (ch) (map-char ch rotkey))))
+         (lambda (ch) (map-char-fn ch rotkey))))
     (string-join
      (mapcar encode-char (delete "" (split-string word "")))
      "")
     ))
 
-(defun map-char (ch rotkey)
+(defun map-char-fn (ch rotkey)
   "map the given character (actually a string) to its new value
 returns a string"
   (cond
-   ((and (or (string= ch "a") (string> ch "a"))
-         (or (string= ch "z") (string< ch "z")))
-    (char-to-string (+ ?a (% (+ (- (string-to-char ch) ?a) rotkey) LEN_ALPHA))))
-   ((and (or (string= ch "A") (string> ch "A"))
-         (or (string= ch "Z") (string< ch "Z")))
-    (char-to-string (+ ?A (% (+ (- (string-to-char ch) ?A) rotkey) LEN_ALPHA))))
+   ((map-char-if ch "a" "z") (map-char ch rotkey ?a))
+   ((map-char-if ch "A" "Z") (map-char ch rotkey ?A))
    ((string-match "[[:space:][:punct:][:digit:]]" ch) ch)
    (t (throw 'Error "unsupported character")))
   )
 
-(defun string-join (lst sep)
+;; inlining
+(defsubst map-char (ch rotkey sym)
+  (char-to-string (+ sym (% (+ (- (string-to-char ch) sym) rotkey) LEN_ALPHA))))
+
+;; inlining too
+(defsubst string-join (lst sep)
   (mapconcat 'identity lst sep))
 
 (provide 'rotational-cipher)

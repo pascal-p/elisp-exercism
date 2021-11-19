@@ -55,14 +55,14 @@
 
 ;; other tests
 
-(ert-deftest map-char-rot13-n-a ()
-  (should (equal "a" (map-char "n" 13))))
+(ert-deftest map-char-fn-rot13-n-a ()
+  (should (equal "a" (map-char-fn "n" 13))))
 
-(ert-deftest map-char-rot13-o-b ()
-  (should (equal "b" (map-char "o" 13))))
+(ert-deftest map-char-fn-rot13-o-b ()
+  (should (equal "b" (map-char-fn "o" 13))))
 
-(ert-deftest map-char-rot13-m-z ()
-  (should (equal "z" (map-char "m" 13))))
+(ert-deftest map-char-fn-rot13-m-z ()
+  (should (equal "z" (map-char-fn "m" 13))))
 
 (provide 'rotational-cipher-test)
 ;;; rotational-cipher-test.el ends here
