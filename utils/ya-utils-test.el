@@ -214,7 +214,7 @@
   )
 
 (ert-deftest test-ya-find-3 ()
-  (should (equal '(6 12)
+  (should (equal '(12 6)
                  (ya:find (lambda (x) (and (< x 100) (/ x 2))) '(101 202 12 10 303 30 404 45 505))))
   )
 
@@ -239,4 +239,35 @@
 (ert-deftest test-ya-split-4 ()
   (should (equal '((101 202 303 404 505) ())
                  (ya:split (lambda (x) (< x 10)) '(101 202 303 404 505))))
+  )
+
+
+;; ya:before, ya:after
+
+(ert-deftest test-ya-before-1 ()
+  (should (equal '() (ya:before 'd 'b '(a b c d))))
+  )
+
+(ert-deftest test-ya-before-2 ()
+  (should (equal '(b c d) (ya:before 'b 'd '(a b c d))))
+  )
+
+(ert-deftest test-ya-before-3 ()
+  (should (equal '(a) (ya:before 'a 'd '(a))))
+  )
+
+(ert-deftest test-ya-after-1 ()
+  (should (equal '() (ya:after 'a 'c '(a b c d))))
+  )
+
+(ert-deftest test-ya-after-2 ()
+  (should (equal '(c d) (ya:after 'c 'a '(a b c d))))
+  )
+
+(ert-deftest test-ya-after-3 ()
+  (should (equal '() (ya:after 'd 'a '(d))))
+  )
+
+(ert-deftest test-ya-after-4 ()
+  (should (equal '(d) (ya:after 'd 'a '(a d))))
   )

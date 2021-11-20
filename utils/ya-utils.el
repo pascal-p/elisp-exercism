@@ -112,3 +112,27 @@ standard Lisp idiom for accumulating a list."
          (cl-values (nreverse nlst) src))
       (push (car src) nlst)))
   )
+
+(defun ya:before (x y lst &optional cmp)
+  (unless cmp (setq cmp 'eql))
+  (and lst
+       (let ((first (car lst)))
+         (cond ((funcall cmp y first) nil)
+               ((funcall cmp x first) lst)
+               (t (ya:before x y (cdr lst) cmp)))))
+  )
+
+(defun ya:after (x y lst &optional cmp)
+  (unless cmp (setq cmp 'eql))
+  (let ((res (ya:before y x lst cmp)))
+    (and res
+         (ya:member x res cmp)))
+)
+
+(defun ya:member (x lst &optional cmp)
+  (unless cmp (setq cmp 'eql))
+  (cond ((equal cmp 'eql) (memql x lst))
+        ((equal cmp 'eq) (memq x lst))
+        ((equal cmp 'equal) (member x lst))
+        (t (throw 'Error "Not supported yet...")))
+  )
