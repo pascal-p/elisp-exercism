@@ -200,3 +200,43 @@
          (res (ya:prune even-fn '(1 2 (3 (4 5) 6) 7 8 (9)))))
     (should (equal '((9) 7 ((5) 3) 1) res))
     ))
+
+;; ya:find
+
+(ert-deftest test-ya-find-1 ()
+  (should (equal '(21 21)
+                 (ya:find (lambda (x) (and (< x 100) x)) '(101 202 21 10 303 30 404 45 505))))
+  )
+
+(ert-deftest test-ya-find-2 ()
+  (should (equal '()
+                 (ya:find (lambda (x) (> x 1000)) '(101 202 21 10 303 30 404 45 505))))
+  )
+
+(ert-deftest test-ya-find-3 ()
+  (should (equal '(6 12)
+                 (ya:find (lambda (x) (and (< x 100) (/ x 2))) '(101 202 12 10 303 30 404 45 505))))
+  )
+
+
+;; ya:split
+
+(ert-deftest test-ya-split-1 ()
+  (should (equal '((1 2 3 4) (5 10 20 30))
+                 (ya:split (lambda (x) (> x 4)) '(1 2 3 4 5 10 20 30))))
+  )
+
+(ert-deftest test-ya-split-2 ()
+  (should (equal '(() (5 10 20 30))
+                 (ya:split (lambda (x) (> x 4)) '(5 10 20 30))))
+  )
+
+(ert-deftest test-ya-split-3 ()
+  (should (equal '(() ())
+                 (ya:split (lambda (x) (> x 4)) '())))
+  )
+
+(ert-deftest test-ya-split-4 ()
+  (should (equal '((101 202 303 404 505) ())
+                 (ya:split (lambda (x) (< x 10)) '(101 202 303 404 505))))
+  )

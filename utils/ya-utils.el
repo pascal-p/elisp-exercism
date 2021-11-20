@@ -96,3 +96,19 @@ standard Lisp idiom for accumulating a list."
                                    (cons (car tree:) ntree:)))))))
     (:prune-fn tree '()))
   )
+
+(defun ya:find (fn lst)
+  "find first occ of item in lst which satisfies fn"
+  (if (null lst) nil
+    (let ((v (funcall fn (car lst))))
+      (if v (cl-values (car lst) v)
+        (ya:find fn (cdr lst))))))
+
+(defun ya:split (fn lst)
+  "split ordered list according to value of fn"
+  (let ((nlst nil))
+    (cl-do ((src lst (cdr src))) ;; init src with lst, then next value will be cdr of that (src) list
+        ((or (null src) (funcall fn (car src)))
+         (cl-values (nreverse nlst) src))
+      (push (car src) nlst)))
+  )
