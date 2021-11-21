@@ -34,36 +34,40 @@
               num rem
               pair (divrem num p)
               num (car pair)
-              rem (cdr pair)
-              ))
+              rem (cdr pair)))
       (concat roman (roman-fn num p)))
     ))
 
+(defmacro cdr-assoc (key)
+  `(cdr (assoc ,key ya-roman-map)))
+
 (defun update-roman-value (roman p num)
-  (cond ((= p 1000) (concat roman (repeat-string (cdr-assoc p) num)))
-        ((or (= p 100) (= p 10)) (concat roman (roman-fn num p)))
-        ((= p 1) (concat roman (cdr-assoc p)))
-        (t roman)))
+  (cond
+   ((= p 1000)
+    (concat roman (repeat-string (cdr-assoc p) num)))
+   ((or (= p 100) (= p 10))
+    (concat roman (roman-fn num p)))
+   ((= p 1)
+    (concat roman (cdr-assoc p)))
+   (t roman)))
 
 (defun roman-fn (num p)
   (cond
-   ((<= num 3) (repeat-string (cdr-assoc p) num))                                   ;; 30 => XXX
-   ((= num 4) (concat (cdr-assoc p) (cdr-assoc (* 5 p))))                           ;; 40 => XL
-   ((< num 9) (concat (cdr-assoc (* 5 p)) (repeat-string (cdr-assoc p) (- num 5)))) ;; 70 => LXX
-   (t (concat (cdr-assoc p) (cdr-assoc (* 10 p))))                                  ;; 90 => XC
+   ((<= num 3)  ;; ex. 30 => XXX
+    (repeat-string (cdr-assoc p) num))
+   ((= num 4)   ;; ex. 40 => XL
+    (concat (cdr-assoc p) (cdr-assoc (* 5 p))))
+   ((< num 9)   ;; ex. 70 => LXX
+    (concat (cdr-assoc (* 5 p)) (repeat-string (cdr-assoc p) (- num 5))))
+   (t           ;; 90 => XC
+    (concat (cdr-assoc p) (cdr-assoc (* 10 p))))
    ))
 
-(defun cdr-assoc (key)
-  (cdr (assoc key ya-roman-map)))
-
-(defun divrem (n d)
+(defsubst divrem (n d)
   (if (= 0 d) (throw 'Error "Division by 0")
-    (let ((q (/ n d))
-          (r (% n d)))
-      (cons q r))
-    ))
+    (cons (/ n d) (% n d))))
 
-(defun repeat-string (str num)
+(defsubst repeat-string (str num)
   "input string str must be mono character
 (repeat-string \"X\" 3) => \"XXX\"
 "
