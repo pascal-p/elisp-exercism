@@ -1,11 +1,10 @@
 ## Exercism - Emacs-Lisp (elisp) Programming Languages
 
-Practicing elisp.
+Practicing emacs-lisp (elisp) with some cl-lisp extensions.
 
 Check https://exercism.io/tracks/emacs-lisp
 
-Sep-Oct 2021
-
+Sep-Nov 2021
 
 <hr />
 <p><sub><em>2021 Corto Inc</sub></em></p>
