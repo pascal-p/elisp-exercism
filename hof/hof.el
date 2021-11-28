@@ -46,5 +46,28 @@
 (defalias 'ya:reverse! (! 'reverse))
 (defalias 'ya:append! (! 'append))
 
+;; simple memoize function
+(defun memoize (fn)
+  (let ((cache (make-hash-table :test 'equal)))
+    (lambda (&rest args)
+      (cl-multiple-value-bind (val hit) (gethash args cache)
+        (print val " - " hit)
+        (if hit val
+          (setf (gethash args cache)
+                (apply fn args))))))
+  )
+
+;; (defun fib (n)
+;;   (if (or (= 0 n) (= 1 n)) 1
+;;     (+ (fib (- n 1)) (fib (- n 2)))))
+
+;; (require 'benchmark)
+;;
+;; (benchmark-elapse (funcall memoize-fib 8)) ;; 1st exec - build the cache
+;; (benchmark-elapse (funcall memoize-fib 8)) ;; 2nd exec faster
+
+;; (benchmark-run 2 (funcall memoize-fib 30)) ;; (3.088015825 42 1.6604243900000029)
+;; 2 exec - total of 3 sec => 42 gc ops taking 1.66s
+
 (provide 'hof)
 ;;; hof.el ends here
