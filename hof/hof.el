@@ -5,8 +5,7 @@
 ;;; Code:
 (require 'cl-lib)
 
-(defun ya:odd-pred (x)
-  (= 1 (% x 2)))
+(defun ya:odd-pred (x) (= 1 (% x 2)))
 
 (defmacro ya:remove-if-not (pred-fn &rest args)
   "build the complementary function of remove-if"
@@ -68,6 +67,50 @@
 
 ;; (benchmark-run 2 (funcall memoize-fib 30)) ;; (3.088015825 42 1.6604243900000029)
 ;; 2 exec - total of 3 sec => 42 gc ops taking 1.66s
+
+;; composing functions
+(defalias 'λ 'lambda)
+
+;; (defun ya:compose (&rest fns)
+;;   "(compose (f1 f2 f3)(x) ≡  (f1 ∘ f2 ∘ f3)(x)"
+;;   (if fns
+;;       (let ((l:fn (car (last fns)))
+;;             (l:fns (butlast fns)))
+;;         (print l:fn)
+;;         (print l:fns)
+;;         (λ (&rest args)
+;;            (cl-reduce 'funcall l:fns
+;;                       :from-end t
+;;                       :initial-value (apply l:fn args))))
+;;     'identity))
+
+;; (defmacro ya:compose1 (&rest fns)
+;;   "(compose (f1 f2 f3)(x) ≡  (f1 ∘ f2 ∘ f3)(x)"
+;;   (if fns
+;;       (let ((l:fn (gensym))
+;;             (l:fns (gensym)))
+;;         `(let ((l:fn ,(car (last fns)))
+;;                (l:fns (list ,@(butlast fns))))
+;;            (λ (&rest args)
+;;              (cl-reduce 'funcall l:fns
+;;                         :from-end t
+;;                         :initial-value (apply l:fn args)))))
+;;     'identity))
+
+(defmacro ya:compose (&rest fns)
+  "(compose (f1 f2 f3)(x) ≡  (f1 ∘ f2 ∘ f3)(x)"
+  (if fns
+      (let ((l:fn (gensym))
+            (l:fns (gensym)))
+        `(let ((,l:fn ,(car (last fns)))
+               (,l:fns (list ,@(butlast fns))))
+           (λ (&rest args)
+              (cl-reduce 'funcall ,l:fns
+                         :from-end t
+                         :initial-value (apply ,l:fn args)))))
+    'identity))
+
+(defalias '∘ 'ya:compose)
 
 (provide 'hof)
 ;;; hof.el ends here

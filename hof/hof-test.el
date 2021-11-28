@@ -3,12 +3,8 @@
 ;;; Commentary:
 
 ;;; Code:
-
-;; (require 'cl-lib)
+(require 'cl-lib)
 (load-file "hof.el")
-
-;; (defun odd-pred (x)
-;;   (= 1 (% x 2)))
 
 (ert-deftest test-remove-if ()
   (should (equal (cl-remove-if 'ya:odd-pred '(10 11 20 21 30 31 40 41)) ;; remove odd numbers
@@ -45,6 +41,21 @@
 (ert-deftest test-reverse! ()
   (should (equal (ya:reverse! '(10 20 30 40 50 60))
                  '(60 50 40 30 20 10))))
+
+;; testing composition - using macro
+(defun f1 (x) (1+ x))
+(defun f2 (x) (* 2 x))
+
+;; (ert-deftest test-composition-1 () ;; 2x + 1
+;;   (should (= 21
+;;              (funcall (∘ 'f1 'f2) 10))))
+
+;; (ert-deftest test-composition-2 () ;; (x + 1) * 2
+;;   (let ((fcomp (∘ 'f2 'f1)))
+;;     (should (= 42 (funcall fcomp 20)))))
+
+;; (print (macroexpand '(∘ 'f2 'f1)))
+;; (funcall (∘ 'f2 'f1) 10) ;; => Symbol’s value as variable is void: g43
 
 (provide 'hof-test)
 ;;; hof-test.el ends here
